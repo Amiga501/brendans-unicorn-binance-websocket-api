@@ -34,7 +34,7 @@
 # IN THE SOFTWARE.
 
 from __future__ import print_function
-from unicorn_binance_websocket_api.connection import BinanceWebSocketApiConnection
+from brendans_unicorn_binance_websocket_api.connection import BinanceWebSocketApiConnection
 from unicorn_fy.unicorn_fy import UnicornFy
 import asyncio
 import ujson as json

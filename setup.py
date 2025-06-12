@@ -34,7 +34,7 @@
 # IN THE SOFTWARE.
 
 import setuptools
-from unicorn_binance_websocket_api.manager import BinanceWebSocketApiManager
+from brendans_unicorn_binance_websocket_api.manager import BinanceWebSocketApiManager
 
 ubwa = BinanceWebSocketApiManager()
 
@@ -42,7 +42,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-     name='unicorn-binance-websocket-api',
+     name='brendans-unicorn-binance-websocket-api',
      version=str(ubwa.get_version()),
      author="LUCIT Systems and Development",
      author_email='info@lucit.tech',

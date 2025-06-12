@@ -33,7 +33,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-from unicorn_binance_websocket_api.exceptions import StreamRecoveryError, Socks5ProxyConnectionError
+from brendans_unicorn_binance_websocket_api.exceptions import StreamRecoveryError, Socks5ProxyConnectionError
 from urllib.parse import urlparse
 import asyncio
 import copy
