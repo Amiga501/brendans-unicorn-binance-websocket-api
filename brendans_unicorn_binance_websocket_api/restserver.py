@@ -32,11 +32,12 @@
 # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
+from brendans_unicorn_binance_websocket_api.loggers import UnicornHandlerLogger
 
 from flask_restful import Resource
 import logging
 
-logger = logging.getLogger("unicorn_binance_websocket_api")
+LOGGER = UnicornHandlerLogger().logger
 
 
 class BinanceWebSocketApiRestServer(Resource):
@@ -52,6 +53,7 @@ class BinanceWebSocketApiRestServer(Resource):
     :type warn_on_update: bool
     """
     def __init__(self, handler_binance_websocket_api_manager, warn_on_update=True):
+        self.logger = LOGGER
         self.manager = handler_binance_websocket_api_manager
         self.warn_on_update = warn_on_update
 
@@ -69,10 +71,10 @@ class BinanceWebSocketApiRestServer(Resource):
         :rtype: list (status string, http status code)
         """
         if statusformat == "icinga":
-            logger.info(f"BinanceWebSocketApiRestServer.get({statusformat}, {str(checkcommandversion)}) - 200")
+            self.logger.info(f"BinanceWebSocketApiRestServer.get({statusformat}, {str(checkcommandversion)}) - 200")
             return self.manager.get_monitoring_status_icinga(check_command_version=checkcommandversion,
                                                              warn_on_update=self.warn_on_update), 200
         else:
-            logger.error(f"BinanceWebSocketApiRestServer.get({statusformat}, {str(checkcommandversion)}) - Service not"
+            self.logger.error(f"BinanceWebSocketApiRestServer.get({statusformat}, {str(checkcommandversion)}) - Service not"
                           f"found!")
             return "service not found", 404

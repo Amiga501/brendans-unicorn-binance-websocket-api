@@ -39,6 +39,7 @@ from brendans_unicorn_binance_websocket_api.restclient import BinanceWebSocketAp
 from brendans_unicorn_binance_websocket_api.restserver import BinanceWebSocketApiRestServer
 from brendans_unicorn_binance_websocket_api.sockets import BinanceWebSocketApiSocket
 from brendans_unicorn_binance_websocket_api.api import BinanceWebSocketApiApi
+from brendans_unicorn_binance_websocket_api.loggers import UnicornHandlerLogger
 
 from cheroot import wsgi
 from collections import deque
@@ -73,7 +74,7 @@ import uuid
 import ujson as json
 import websockets
 
-LOGGER = logging.getLogger("unicorn_binance_websocket_api")
+LOGGER = UnicornHandlerLogger().logger
 
 
 

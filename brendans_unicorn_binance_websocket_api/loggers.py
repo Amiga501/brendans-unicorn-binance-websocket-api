@@ -11,6 +11,8 @@ from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
 import logging
+import logging.config
+
 import structlog
 import sys
 
@@ -385,6 +387,6 @@ class UnicornHandlerLogger:
         """
         logger_ = Logger(
             logger_name="unicorn.handlers",
+            log_level="WARNING",
             )
-        logger_.set_log_level("WARNING")
         self.logger = logger_.get_logger()

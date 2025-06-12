@@ -34,12 +34,15 @@
 # IN THE SOFTWARE.
 
 from unicorn_binance_rest_api import BinanceRestApiManager
+
+from brendans_unicorn_binance_websocket_api.loggers import UnicornHandlerLogger
+
 import logging
 import threading
 import time
 from typing import Optional, Union
 
-logger = logging.getLogger("unicorn_binance_websocket_api")
+LOGGER = UnicornHandlerLogger().logger
 
 
 class BinanceWebSocketApiRestclient(object):
@@ -50,6 +53,7 @@ class BinanceWebSocketApiRestclient(object):
         :param manager: provide `self` of `BinanceWebsocketApiManager()`
         :type manager: object
         """
+        self.logger = LOGGER
         self.manager = manager
         self.api_key = False
         self.api_secret = False
@@ -104,7 +108,7 @@ class BinanceWebSocketApiRestclient(object):
             if self.manager.show_secrets_in_logs is True:
                 self.listen_key_output = self.listen_key
         except KeyError as error_msg:
-            logger.error(f"BinanceWebSocketApiRestclient.init_vars() - TypeError - error_msg: {str(error_msg)}")
+            self.logger.error(f"BinanceWebSocketApiRestclient.init_vars() - TypeError - error_msg: {str(error_msg)}")
             return False
         return True
 
@@ -130,7 +134,7 @@ class BinanceWebSocketApiRestclient(object):
         :return: listen_key
         :rtype: str or False
         """
-        logger.info(f"BinanceWebSocketApiRestclient.get_listen_key() symbol='{str(self.symbol)}' "
+        self.logger.info(f"BinanceWebSocketApiRestclient.get_listen_key() symbol='{str(self.symbol)}' "
                     f"stream_id='{str(stream_id)}')")
         if stream_id is False:
             return False
@@ -153,13 +157,13 @@ class BinanceWebSocketApiRestclient(object):
                         ubra.MARGIN_API_URL = self.manager.restful_base_uri
                     response = ubra.margin_stream_get_listen_key(output="raw_data", throw_exception=False)
                 except AttributeError as error_msg:
-                    logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
+                    self.logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
                                     f"error_msg: {error_msg} - Can not acquire listen_key for margin!")
                     return False
             elif self.manager.exchange == "binance.com-isolated_margin" or \
                     self.manager.exchange == "binance.com-isolated_margin-testnet":
                 if self.symbol is False:
-                    logger.critical("BinanceWebSocketApiRestclient.get_listen_key() - error_msg: Parameter "
+                    self.logger.critical("BinanceWebSocketApiRestclient.get_listen_key() - error_msg: Parameter "
                                     "`symbol` is missing!")
                     return False
                 else:
@@ -169,7 +173,7 @@ class BinanceWebSocketApiRestclient(object):
                         response = ubra.isolated_margin_stream_get_listen_key(symbol=str(self.symbol), output="raw_data",
                                                                               throw_exception=False)
                     except AttributeError as error_msg:
-                        logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
+                        self.logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
                                         f"error_msg: {error_msg} - Can not acquire listen_key for isolated_margin!")
                         return False
             elif self.manager.exchange == "binance.com-futures":
@@ -178,7 +182,7 @@ class BinanceWebSocketApiRestclient(object):
                         ubra.FUTURES_URL = self.manager.restful_base_uri
                     response = ubra.futures_stream_get_listen_key(output="raw_data", throw_exception=False)
                 except AttributeError as error_msg:
-                    logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
+                    self.logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
                                     f"error_msg: {error_msg} - Can not acquire listen_key for futures!!")
                     return False
             elif self.manager.exchange == "binance.com-coin_futures":
@@ -187,7 +191,7 @@ class BinanceWebSocketApiRestclient(object):
                         ubra.FUTURES_COIN_URL = self.manager.restful_base_uri
                     response = ubra.futures_coin_stream_get_listen_key(output="raw_data", throw_exception=False)
                 except AttributeError as error_msg:
-                    logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
+                    self.logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
                                     f"error_msg: {error_msg} - Can not acquire listen_key for coin futures!!")
                     return False
             else:
@@ -196,7 +200,7 @@ class BinanceWebSocketApiRestclient(object):
                         ubra.API_URL = self.manager.restful_base_uri
                     response = ubra.stream_get_listen_key(output="raw_data", throw_exception=False)
                 except AttributeError as error_msg:
-                    logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
+                    self.logger.critical(f"BinanceWebSocketApiRestclient.get_listen_key() - error: 8 - "
                                     f"error_msg: {error_msg} - Can not acquire listen_key for exchange='"
                                     f"{self.manager.exchange}'!")
                     return False
@@ -233,7 +237,7 @@ class BinanceWebSocketApiRestclient(object):
         :return: the response
         :rtype: str or False
         """
-        logger.info(f"BinanceWebSocketApiRestclient.delete_listen_key() stream_id='{str(stream_id)}')")
+        self.logger.info(f"BinanceWebSocketApiRestclient.delete_listen_key() stream_id='{str(stream_id)}')")
         if stream_id is False:
             return False
         with self.threading_lock:
@@ -299,7 +303,7 @@ class BinanceWebSocketApiRestclient(object):
         :return: the response
         :rtype: str or False
         """
-        logger.info(f"BinanceWebSocketApiRestclient.get_listen_key() stream_id='{str(stream_id)}')")
+        self.logger.info(f"BinanceWebSocketApiRestclient.get_listen_key() stream_id='{str(stream_id)}')")
         if stream_id is False:
             return False
         with self.threading_lock:
